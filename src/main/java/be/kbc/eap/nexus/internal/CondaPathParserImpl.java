@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import java.util.Arrays;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -63,9 +64,17 @@ public class CondaPathParserImpl
         String version = "";
         String build = "";
         String extension = "";
-        if(parts.length>1) {
-            version = parts[1];
-            build = parts[2].replace(".tar.bz2", "");
+        int vi = 1;
+        if (parts.length > 3){
+            vi = parts.length - 2;
+            packageName = String.join("-", Arrays.copyOfRange(parts, 0, vi));
+        }
+
+        if(parts.length>vi) {
+            version = parts[vi];
+        }
+        if(parts.length>vi+1){
+            build = parts[vi+1].replace(".tar.bz2", "");
         }
 
         int nExtPos = fileName.lastIndexOf('.');
